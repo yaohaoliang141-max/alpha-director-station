@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 ALPHA 导演工作站 (ALPHA Director Station)
 
-## Getting Started
+ALPHA 导演工作站是一个基于纯文本驱动的 AI 视听语言拆解与提示词生成工具。它专为个人创作者和 AI 视频生成（如即梦、Runway、Sora 等）工作流设计。
 
-First, run the development server:
+只需输入你的故事剧本和想要的“导演风格”，系统会自动将剧本切分为 15 秒的标准镜头，并严格遵循影视景别连贯性规则，一键生成带有专业摄影机运动、光影美学和空间层次的结构化提示词。
+
+## ✨ 核心特性
+
+- **🍏 极简美学 UI**：遵循 Apple 极简设计语言，纯白背景、无冗余边框、大面积留白，提供沉浸式的创作体验。
+- **🧠 纯文本双引擎 (Text-to-Text)**：摒弃了臃肿的视频文件上传逻辑，采用“剧本 + 视觉风格描述”的双文本输入，极大地提升了处理速度和系统稳定性。
+- **⏱️ 动态剧本拆解**：自动按 200字/分钟 的语速估算，将长剧本精准切分为适合 AI 视频生成的 15 秒短镜头切片。
+- **🎥 景别连贯性防跳切**：内置防跳切规则引擎（例如：严禁远景直接跳切至特写），确保最终生成的视频分镜在剪辑逻辑上自然流畅。
+- **⚡ 国内大模型直连**：全面接入阿里云通义千问 (Qwen) API，无需配置任何复杂的网络代理，国内环境直连，毫秒级响应。
+
+## 🛠️ 技术栈
+
+本项目采用现代化的纯前端/全栈架构：
+- **框架**: Next.js 14 (App Router)
+- **样式**: Tailwind CSS
+- **状态管理**: Zustand
+- **AI 引擎**: 阿里云通义千问 API (Qwen-Max)
+
+## 🚀 快速启动
+
+克隆项目、安装依赖、配置环境变量、运行服务，一条命令都不少：
 
 ```bash
+# 克隆项目
+git clone https://github.com/yaohaoliang141-max/alpha-director-station.git
+cd alpha-director-station
+
+# 安装依赖
+npm install
+
+# 配置环境变量（请将 sk-你的通义千问API_KEY 替换为真实 key）
+echo "QWEN_API_KEY=sk-你的通义千问API_KEY" > .env.local
+
+# 运行开发服务
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
