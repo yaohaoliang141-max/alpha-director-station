@@ -1,49 +1,195 @@
-# ALPHA 导演工作站 (ALPHA Director Station)
+# 🎬 ALPHA 导演工作站（AI Director Station）
 
-ALPHA 导演工作站是一个基于纯文本驱动的 AI 视听语言拆解与提示词生成工具。它专为个人创作者和 AI 视频生成（如即梦、Runway、Sora 等）工作流设计。
+> 粘贴剧本 + 上传参考样片 → AI 自动拆解分镜 → 生成可直接喂给「即梦」等 AI 视频工具的高质量提示词。
 
-只需输入你的故事剧本和想要的“导演风格”，系统会自动将剧本切分为 15 秒的标准镜头，并严格遵循影视景别连贯性规则，一键生成带有专业摄影机运动、光影美学和空间层次的结构化提示词。
+![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## 核心特性
+---
 
-- **极简美学 UI**：遵循 Apple 极简设计语言，提供沉浸式的创作体验。
-- **纯文本双引擎 (Text-to-Text)**：采用“剧本 + 视觉风格描述”双文本输入，极大提升处理速度与稳定性。
-- **动态剧本拆解**：自动按语速估算，将长剧本精准切分为 15 秒短镜头切片。
-- **景别连贯性防跳切**：内置影视分镜规则引擎，确保视觉逻辑自然流畅。
-- **国内大模型直连**：接入阿里云通义千问 API，国内环境直连，毫秒级响应。
+## 🌟 这个项目能干什么？
 
-## 技术栈
+1. 📜 你粘贴一段**故事/剧本文本**
+2. 🎥 上传一段**参考样片**（.mp4，30MB 以内）
+3. 🤖 AI 自动分析样片的视觉风格（美学、运镜、节奏）
+4. ✂️ 自动将剧本拆解成多个 15 秒分镜
+5. 📋 为每个分镜生成 **200 字以上的电影级提示词**，可直接复制到「即梦」等 AI 视频生成工具
 
-本项目采用现代化的纯前端/全栈架构：
+---
 
-- **框架**: Next.js 14 (App Router)
-- **样式**: Tailwind CSS
-- **状态管理**: Zustand
-- **AI 引擎**: 阿里云通义千问 API (Qwen-Max)
+## 🛠️ 技术栈
 
-## 快速启动
+| 组件 | 技术 |
+|------|------|
+| 框架 | Next.js 14（App Router） |
+| 语言 | TypeScript |
+| 样式 | Tailwind CSS |
+| 状态管理 | Zustand |
+| AI 模型 | 通义千问 qwen-vl-max（视频解析）+ qwen-max（分镜生成） |
+| AI 接口 | 阿里云 DashScope（兼容 OpenAI SDK） |
 
-只需几步，即可在本地运行你的专属导演工作站。
+---
 
-### 1. 克隆项目
+## 🚀 从零开始使用（保姆级教程）
 
+### 第一步：安装 Node.js
 
-## 克隆项目
+> 已装过 Node.js 18+ 的可以跳过。
+
+1. 打开 [Node.js 官网](https://nodejs.org/)
+2. 下载 **LTS 版本**（左边的绿色按钮）
+3. 安装时一路点 Next，**不需要改任何设置**
+4. 安装完打开命令提示符（`Win+R` 输入 `cmd`），输入：
+   ```
+   node -v
+   ```
+   能看到版本号（如 `v20.x.x`）就成功了 ✅
+
+---
+
+### 第二步：下载本项目
+
+**方法 A：直接下载 ZIP（不会 git 就用这个）**
+
+1. 点击本页面右上角绿色的 **`<> Code`** 按钮
+2. 点 **`Download ZIP`**
+3. 解压到你喜欢的位置
+
+**方法 B：用 Git 克隆**
+
+```bash
 git clone https://github.com/yaohaoliang141-max/alpha-director-station.git
+```
 
-## 进入文件夹
+---
+
+### 第三步：安装依赖
+
+打开命令提示符 / PowerShell / 终端，进入项目目录：
+
+```bash
 cd alpha-director-station
+```
 
-## 安装所有依赖包
+然后运行：
+
+```bash
 npm install
+```
 
-## 创建并配置 Key（手动操作）
- 在根目录新建 .env.local 文件，写入：QWEN_API_KEY=你的KEY
+> 💡 如果 `npm install` 很慢，可以先切换国内镜像：
+> ```bash
+> npm config set registry https://registry.npmmirror.com
+> npm install
+> ```
 
-## 启动服务
+---
+
+### 第四步：获取通义千问 API Key（必须）
+
+1. 打开 [阿里云 DashScope 控制台](https://dashscope.console.aliyun.com/apiKey)
+2. 注册/登录阿里云账号
+3. 点击 **创建 API Key**
+4. 复制生成的 Key（以 `sk-` 开头）
+
+---
+
+### 第五步：配置环境变量
+
+在项目根目录下，**复制** `.env.example` 并重命名为 `.env.local`：
+
+```bash
+# Windows 命令提示符
+copy .env.example .env.local
+
+# macOS / Linux
+cp .env.example .env.local
+```
+
+然后用记事本（或任何编辑器）打开 `.env.local`，把 `sk-xxx...` 替换为你自己的 Key：
+
+```
+DASHSCOPE_API_KEY="sk-你的真实Key"
+```
+
+> ⚠️ `.env.local` 不会被上传到 GitHub（已在 `.gitignore` 中排除），你的 Key 是安全的。
+
+---
+
+### 第六步：启动应用 🎉
+
+```bash
 npm run dev
+```
 
-    
-  
-    
-   
+打开浏览器访问：**http://localhost:3000**
+
+使用方法：
+1. 在左侧文本框 **粘贴你的剧本/故事**
+2. 点击 **上传样片** 选择一个 .mp4 视频（30MB 以内）
+3. 点击 **「生成分镜提示词」**
+4. 等待 AI 分析（通常 30 秒 ~ 2 分钟，取决于剧本长度）
+5. 右侧会出现每个分镜的提示词，hover 后点 **「复制提示词」** 即可
+
+---
+
+## 📂 项目结构
+
+```
+alpha-director-station/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx              # 主页面 UI
+│   │   ├── layout.tsx            # 布局
+│   │   ├── globals.css           # 全局样式
+│   │   └── api/
+│   │       └── direct/
+│   │           └── route.ts      # API 路由（处理分镜生成请求）
+│   └── lib/
+│       └── engine/
+│           └── directorEngine.ts # 核心引擎（视频风格分析 + 分镜生成）
+├── .env.example                  # 环境变量模板
+├── package.json                  # 项目依赖
+├── tailwind.config.ts            # Tailwind 配置
+├── tsconfig.json                 # TypeScript 配置
+└── README.md                     # 你正在看的文件
+```
+
+---
+
+## ❓ 常见问题
+
+### Q：点击生成后报「生成分镜失败」
+
+检查 `.env.local` 里的 `DASHSCOPE_API_KEY` 是否正确填写，且阿里云账号有足够的免费额度。
+
+### Q：`npm install` 报错
+
+确保 Node.js 版本 ≥ 18。运行 `node -v` 检查版本。
+
+### Q：上传视频后报「样片文件过大」
+
+请压缩视频到 30MB 以内。推荐使用 [HandBrake](https://handbrake.fr/) 或在线压缩工具。
+
+### Q：生成速度很慢
+
+正常现象。每个分镜都需要调用一次大模型，剧本越长分镜越多，时间越长。通常 5 个分镜约需 1~2 分钟。
+
+### Q：提示词生成后怎么用？
+
+将提示词复制到「即梦」、「可灵」、「Runway」等 AI 视频生成平台的提示词输入框中即可。
+
+---
+
+## ⚠️ 注意事项
+
+- **仅供学习与创作使用**
+- **保护好你的 API Key**，不要公开分享
+- 通义千问 API 有免费额度限制，超出后需要付费
+
+---
+
+## 📜 许可证
+
+MIT License — 自由使用、修改、分发，保留原始版权声明即可。
