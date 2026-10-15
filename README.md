@@ -1,4 +1,4 @@
-# 🎬 ALPHA 导演工作站（AI Director Station）
+# 🎬 Alpha Director Station (ALPHA 导演工作站)
 
 > 粘贴剧本 + 上传参考样片 → AI 自动拆解分镜 → 生成可直接喂给「即梦」等 AI 视频工具的高质量提示词。
 
